@@ -8,29 +8,53 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     private float Move;
     private bool isFacingRight = true;
+    private bool isCrouching = false;
     private Rigidbody2D rb;
 
     public float jump;
 
     public int jumpsLeft;
 
+    // Collider dimensions for standing and crouching
+    private Vector2 standingColliderSize;
+    private Vector2 crouchingColliderSize;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        standingColliderSize = GetComponent<BoxCollider2D>().size;
+        crouchingColliderSize = new Vector2(standingColliderSize.x, standingColliderSize.y / 2f);
     }
 
-    // I denna void Update så gör koden så att när man gå i en x axel, så får man den velocity man behöver för att kunna gå.
-    // If Koden gör så att, om man trycker på hopp knappen, samtidigt som antalet hopps man har kvar är över 0, så kan man hoppa.
-    // Den gör också så att om man hoppar så går ner antalet hopps man har kvar med 1, till den går ned till 0 då efter det man kan inte hoppa längre på grund av att kraven för att kunna hoppa inte är då uppfyllda.
     void Update()
+    {
+        HandleMovement();
+        HandleJump();
+
+        // Check for crouch input
+        if (Input.GetButtonDown("Crouch"))
+        {
+            isCrouching = true;
+            UpdateColliderSize();
+        }
+        else if (Input.GetButtonUp("Crouch"))
+        {
+            isCrouching = false;
+            UpdateColliderSize();
+        }
+    }
+
+    void HandleMovement()
     {
         Horizontal = Input.GetAxisRaw("Horizontal");
         Move = Input.GetAxis("Horizontal");
         Flip();
 
         rb.velocity = new Vector2(speed * Move, rb.velocity.y);
+    }
 
+    void HandleJump()
+    {
         if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
@@ -38,7 +62,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Denna kod gör bara så att man får tillbaka sina hopp efter att man landat på marken igen.
+    void UpdateColliderSize()
+    {
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
+
+        if (isCrouching)
+        {
+            collider.size = crouchingColliderSize;
+        }
+        else
+        {
+            collider.size = standingColliderSize;
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -49,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Flip()
     {
-        if (isFacingRight && Horizontal < 0f || !isFacingRight && Horizontal > 0f)
+        if ((isFacingRight && Horizontal < 0f) || (!isFacingRight && Horizontal > 0f))
         {
             isFacingRight = !isFacingRight;
             Vector2 localScale = transform.localScale;

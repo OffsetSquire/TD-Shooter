@@ -93,7 +93,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (isCrouching)
         {
+<<<<<<< HEAD
             collider.size = crouchingColliderSize;
+=======
+            Horizontal = Input.GetAxisRaw("Horizontal");
+            Move = Input.GetAxis("Horizontal");
+            Flip();
+
+            
+            float currentSpeed = isCrouching ? speed / 3f : speed;
+
+            rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
+>>>>>>> 8cc8664c280199ce2045f9a28363725eb2943dce
         }
         else
         {
@@ -118,5 +129,20 @@ public class PlayerMovement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+<<<<<<< HEAD
     }
 }
+=======
+
+        private void Flip()
+        {
+            if ((isFacingRight && Horizontal < 0f) || (!isFacingRight && Horizontal > 0f))
+            {
+                isFacingRight = !isFacingRight; 
+                Vector2 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+        }
+    }
+>>>>>>> 8cc8664c280199ce2045f9a28363725eb2943dce

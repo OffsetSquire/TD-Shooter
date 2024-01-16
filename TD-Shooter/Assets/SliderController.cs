@@ -25,16 +25,27 @@ public class SliderController : MonoBehaviour
         // Clamp the fill amount to be within the valid range (0 to 1)
         fillAmount = Mathf.Clamp01(fillAmount);
 
-        // Set the slider's value based on the fill amount
-        slider.value = fillAmount;
+        // Set the slider's normalized value based on the fill amount
+        slider.normalizedValue = fillAmount;
     }
 
-    // Example function to shorten the fill amount (called when a button is pressed, for instance)
-    public void ShortenFillAmount()
+    // Update is called once per frame
+    void Update()
     {
-        // Adjust the fill amount by a certain value (e.g., decrease by 0.1)
-        float currentFillAmount = slider.value;
-        float newFillAmount = Mathf.Clamp01(currentFillAmount - 0.1f);
-        SetSliderFillAmount(newFillAmount);
+        // Check if the Shift key is held down
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            // Decrease the fill amount by a different value (e.g., 0.05) when Shift is held
+            float currentFillAmount = slider.normalizedValue;
+            float newFillAmount = Mathf.Clamp01(currentFillAmount - 0.05f);
+            SetSliderFillAmount(newFillAmount);
+        }
+        else
+        {
+            // Increase the fill amount by a different value (e.g., 0.05) when Shift is not held
+            float currentFillAmount = slider.normalizedValue;
+            float newFillAmount = Mathf.Clamp01(currentFillAmount + 0.05f);
+            SetSliderFillAmount(newFillAmount);
+        }
     }
 }

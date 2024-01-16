@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 448540381}
   m_Layer: 0
   m_Name: Ren
-  m_TagString: Untagged
+  m_TagString: Ren
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -489,7 +489,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1439844610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.62, y: -2.78, z: 0}
+  m_LocalPosition: {x: 2.62, y: -2.78, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -507,8 +507,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6e2a78d0ba9364ba268178644899f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -5
-  minDistance: 5
+  speed: 5
+  rotationSpeed: 1
+  minDistance: 100
 --- !u!1 &1519545583
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,11 +636,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2525795073954438654, guid: 6a591b3a3de36a1439b5dfe2ebbe702c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 4.18
       objectReference: {fileID: 0}
     - target: {fileID: 2525795073954438654, guid: 6a591b3a3de36a1439b5dfe2ebbe702c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3.19
       objectReference: {fileID: 0}
     - target: {fileID: 2525795073954438654, guid: 6a591b3a3de36a1439b5dfe2ebbe702c, type: 3}
       propertyPath: m_LocalPosition.z

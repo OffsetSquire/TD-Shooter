@@ -22,7 +22,7 @@ public class RenMove : MonoBehaviour
         if (distanceToPlayer <= minDistance)
         {
             // Move towards the player only if within the minimum distance
-            transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
         }
     }
 }

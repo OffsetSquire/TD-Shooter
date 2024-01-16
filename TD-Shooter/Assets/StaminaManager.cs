@@ -10,8 +10,8 @@ public class StaminaManager : MonoBehaviour
     public float normalSpeed = 5f;
     private float runningSpeed = 10f; // Double the normal speed
     private bool isRunning = false;
-    private float staminaDrainRate = 0.1f; // Adjust the stamina drain rate here
-    private float regenRate = 0.05f; // Adjust the stamina regeneration rate here
+    private float staminaDrainRate = 0.2f; // Adjust the stamina drain rate here
+    private float regenRate = 0.1f; // Adjust the stamina regeneration rate here
 
     // Start is called before the first frame update
     void Start()
@@ -22,23 +22,20 @@ public class StaminaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            isRunning = !isRunning;
-        }
-
         // Adjust movement speed based on running state
         float currentSpeed = isRunning ? runningSpeed : normalSpeed;
         // Add your movement logic here using the 'currentSpeed' variable
 
         // Adjust stamina based on running state
-        if (isRunning)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            LoseStamina(staminaDrainRate); // Adjust the slower stamina decrease rate while running
+            isRunning = true;
+            LoseStamina(staminaDrainRate); // Adjust the faster stamina decrease rate while running
         }
-        else if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
+        else
         {
-            RegenStamina(regenRate); // Adjust the slower stamina regeneration rate when not running and not moving
+            isRunning = false;
+            RegenStamina(regenRate); // Adjust the slower stamina regeneration rate when not running
         }
     }
 

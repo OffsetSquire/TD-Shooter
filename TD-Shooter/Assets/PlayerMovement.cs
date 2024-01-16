@@ -61,7 +61,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Horizontal = Input.GetAxisRaw("Horizontal");
         Move = Input.GetAxis("Horizontal");
-        Flip();
 
         float currentSpeed = isCrouching ? speed / 3f : speed;
 
@@ -105,14 +104,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Flip()
+    private void Rotate()
     {
         if ((isFacingRight && Horizontal < 0f) || (!isFacingRight && Horizontal > 0f))
         {
             isFacingRight = !isFacingRight;
-            Vector2 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            Vector3 rotation = transform.rotation.eulerAngles;
+            rotation.y += 180f; 
+            transform.rotation = Quaternion.Euler(rotation);
         }
     }
 }

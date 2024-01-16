@@ -11,7 +11,7 @@ public class HealthManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -30,6 +30,15 @@ public class HealthManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Heal(5);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // You can adjust the damage amount based on your requirements
+            TakeDamage(10);
         }
     }
 

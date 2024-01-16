@@ -50,7 +50,15 @@ public class PlayerMovement : MonoBehaviour
         Move = Input.GetAxis("Horizontal");
         Flip();
 
-        rb.velocity = new Vector2(speed * Move, rb.velocity.y);
+        float currentSpeed = isCrouching ? speed / 3f : speed;
+
+        // Check if the shift key is held down to increase speed
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            currentSpeed *= 1.5f; // Adjust the multiplier as needed
+        }
+
+        rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
     }
 
     void HandleJump()
@@ -80,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            jumpsLeft = 2;
+            jumpsLeft = 1;
         }
     }
 

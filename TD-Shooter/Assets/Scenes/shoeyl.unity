@@ -338,7 +338,6 @@ GameObject:
   m_Component:
   - component: {fileID: 541122925}
   - component: {fileID: 541122924}
-  - component: {fileID: 541122923}
   - component: {fileID: 541122926}
   - component: {fileID: 541122927}
   - component: {fileID: 541122928}
@@ -350,20 +349,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &541122923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 541122922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ff36769a97329840ab17b1b87c30ebd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootingPoint: {fileID: 744674989}
-  bulletPrefab: {fileID: 1125751094802208085, guid: b4da37ee849c3014a800eb9ddf8950ec, type: 3}
 --- !u!212 &541122924
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -478,6 +463,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  shootingPoint: {fileID: 744674989}
+  bulletPrefab: {fileID: 1125751094802208085, guid: b4da37ee849c3014a800eb9ddf8950ec, type: 3}
   jump: 1
   jumpsLeft: 1
 --- !u!61 &541122929

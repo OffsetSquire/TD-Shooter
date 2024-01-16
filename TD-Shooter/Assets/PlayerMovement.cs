@@ -50,6 +50,7 @@
             Move = Input.GetAxis("Horizontal");
             Flip();
 
+            
             float currentSpeed = isCrouching ? speed / 3f : speed;
 
             rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
@@ -90,7 +91,7 @@
         {
             if ((isFacingRight && Horizontal < 0f) || (!isFacingRight && Horizontal > 0f))
             {
-                isFacingRight = !isFacingRight;
+                isFacingRight = !isFacingRight; 
                 Vector2 localScale = transform.localScale;
                 localScale.x *= -1f;
                 transform.localScale = localScale;

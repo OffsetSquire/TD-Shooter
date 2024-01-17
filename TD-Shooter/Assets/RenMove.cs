@@ -5,8 +5,11 @@ using UnityEngine;
 public class RenMove : MonoBehaviour
 {
     private Transform target;
+    private float horizontal; // Fixed variable naming
+
     public float speed;
     public float minDistance; // Set the minimum distance here
+    private bool isFacingRight = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +26,20 @@ public class RenMove : MonoBehaviour
         {
             // Move towards the player only if within the minimum distance
             transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
+            Flip(); // Call the Flip method
+        }
+    }
+
+    private void Flip()
+    {
+        horizontal = Input.GetAxisRaw("Horizontal"); // Get input inside the Flip method
+
+        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 newScale = transform.localScale;
+            newScale.x *= -1f;
+            transform.localScale = newScale;
         }
     }
 }

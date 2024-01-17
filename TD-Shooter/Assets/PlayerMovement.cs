@@ -77,14 +77,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            TakeDamage(20);
+            TakeDamage(25);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Heal(5);
-        }
     }
+    
+    void BaseSpeed()
+    {
+        Horizontal = Input.GetAxisRaw("Horizontal");
+        Move = Input.GetAxis("Horizontal");
+    }
+
 
     void HandleMovement()
     {
@@ -103,9 +106,15 @@ public class PlayerMovement : MonoBehaviour
 
             rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
         }
+        else
+        {
+            // If not running, set velocity to zero
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+        }
 
         Rotate();
     }
+
 
     void HandleJump()
     {

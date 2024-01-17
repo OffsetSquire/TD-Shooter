@@ -13,6 +13,11 @@ public class StaminaManager : MonoBehaviour
     private float staminaDrainRate = 0.08f; // Adjust the stamina drain rate here
     private float regenRate = 0.08f; // Adjust the stamina regeneration rate here
 
+    public bool IsRunning
+    {
+        get { return isRunning; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

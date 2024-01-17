@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,36 +16,49 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
 
     public float jump;
-
     public int jumpsLeft;
 
-    // Collider dimensions for standing and crouching
     private Vector2 standingColliderSize;
     private Vector2 crouchingColliderSize;
+    public Image healthBar;
+    public float healthAmount = 100f;
+
+    private StaminaManager staminaManager; // Added variable
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log("takedamage");
+        healthAmount -= damage;
+        healthBar.fillAmount = healthAmount / 100f;
+    }
+
+    public void Heal(float healingAmount)
+    {
+        healthAmount += healingAmount;
+        healthAmount = Mathf.Clamp(healthAmount, 0, 100);
+        healthBar.fillAmount = healthAmount / 100f;
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         standingColliderSize = GetComponent<BoxCollider2D>().size;
         crouchingColliderSize = new Vector2(standingColliderSize.x, standingColliderSize.y / 2f);
+
+        // Find the StaminaManager script on the player or set it through the Inspector
+        staminaManager = GetComponent<StaminaManager>();
     }
 
     void Update()
-
-
     {
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            ShootBullet();
+            //ShootBullet();
         }
-        void ShootBullet()
-        {
-            Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
-        }
+
         HandleMovement();
         HandleJump();
 
-        // Check for crouch input
         if (Input.GetButtonDown("Crouch"))
         {
             isCrouching = true;
@@ -55,6 +69,21 @@ public class PlayerMovement : MonoBehaviour
             isCrouching = false;
             UpdateColliderSize();
         }
+
+        if (healthAmount <= 0)
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            TakeDamage(20);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Heal(5);
+        }
     }
 
     void HandleMovement()
@@ -64,13 +93,18 @@ public class PlayerMovement : MonoBehaviour
 
         float currentSpeed = isCrouching ? speed / 3f : speed;
 
-        // Check if the shift key is held down to increase speed
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        if (staminaManager.IsRunning)
         {
-            currentSpeed *= 1.5f; // Adjust the multiplier as needed
+            // Check if the shift key is held down to increase speed
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                currentSpeed *= 1.5f; // Adjust the multiplier as needed
+            }
+
+            rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
         }
 
-        rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
+        Rotate();
     }
 
     void HandleJump()
@@ -96,9 +130,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(20);
+        }
+        if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsLeft = 1;
         }
@@ -110,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             Vector3 rotation = transform.rotation.eulerAngles;
-            rotation.y += 180f; 
+            rotation.y += 180f;
             transform.rotation = Quaternion.Euler(rotation);
         }
     }

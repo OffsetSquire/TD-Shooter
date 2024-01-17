@@ -8,13 +8,6 @@ public class HealthManager : MonoBehaviour
     public Image healthBar;
     public float healthAmount = 100f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (healthAmount <= 0)
@@ -33,12 +26,11 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // You can adjust the damage amount based on your requirements
-            TakeDamage(10);
+            TakeDamage(20);
         }
     }
 
@@ -52,7 +44,6 @@ public class HealthManager : MonoBehaviour
     {
         healthAmount += healingAmount;
         healthAmount = Mathf.Clamp(healthAmount, 0, 100);
-
         healthBar.fillAmount = healthAmount / 100f;
     }
 }

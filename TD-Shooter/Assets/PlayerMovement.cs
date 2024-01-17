@@ -148,7 +148,11 @@ public class PlayerMovement : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             Vector3 rotation = transform.rotation.eulerAngles;
+<<<<<<< HEAD
             rotation.y += 180f;
+=======
+            rotation.y += 180f;     
+>>>>>>> 02da758947024ce95088f58504ef0010989fd121
             transform.rotation = Quaternion.Euler(rotation);
         }
     }

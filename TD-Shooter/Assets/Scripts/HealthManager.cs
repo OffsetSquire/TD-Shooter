@@ -26,16 +26,9 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            TakeDamage(20);
-        }
-    }
-
     public void TakeDamage(float damage)
     {
+        Debug.Log("takedamage");
         healthAmount -= damage;
         healthBar.fillAmount = healthAmount / 100f;
     }

@@ -6,6 +6,6 @@ public class TitleScreen : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync("Level 1");
+        SceneManager.LoadScene("Level1");
     }
 }

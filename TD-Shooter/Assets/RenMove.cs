@@ -61,7 +61,7 @@ public class RenMove : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             Vector3 newScale = transform.localScale;
-            newScale.x *= -1f;
+            newScale.x *= 1f;
             transform.localScale = newScale;
 
             UpdateMinDistance(); // Update the minimum distance when the direction changes

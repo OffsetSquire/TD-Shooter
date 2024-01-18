@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private float Horizontal;
+    private float horizontal;
     public float speed;
     public Transform shootingPoint;
     public GameObject bulletPrefab;
-    private float Move;
+    private float move;
     private bool isFacingRight = true;
     private bool isCrouching = false;
     private Rigidbody2D rb;
@@ -30,6 +30,12 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("takedamage");
         healthAmount -= damage;
         healthBar.fillAmount = healthAmount / 100f;
+
+        if (healthAmount <= 0)
+        {
+            // You may want to call a separate function for handling player death here.
+            // For example: PlayerDied();
+        }
     }
 
     public void Heal(float healingAmount)
@@ -51,21 +57,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
-        void ShootBullet()
-        {
-            if (bulletPrefab != null && shootingPoint != null)
-            {
-                GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
-
-            }
-        }
-
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            ShootBullet();
-        }
-
         HandleMovement();
         HandleJump();
 
@@ -80,24 +71,33 @@ public class PlayerMovement : MonoBehaviour
             UpdateColliderSize();
         }
 
-        if (healthAmount <= 0)
-        {
-            Application.LoadLevel(Application.loadedLevel);
-        }
-
         if (Input.GetKeyDown(KeyCode.Return))
         {
             TakeDamage(25);
+        }
+
+        void ShootBullet()
+        {
+            if (bulletPrefab != null && shootingPoint != null)
+            {
+                Quaternion q= shootingPoint.rotation;
+                GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
+
+            }
+        }
+
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            ShootBullet();
         }
 
     }
 
     void BaseSpeed()
     {
-        Horizontal = Input.GetAxisRaw("Horizontal");
-        Move = Input.GetAxis("Horizontal");
+        horizontal = Input.GetAxisRaw("Horizontal");
+        move = Input.GetAxis("Horizontal");
     }
-
 
     void HandleMovement()
     {
@@ -113,16 +113,16 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed *= 1.5f; // Adjust the multiplier as needed
             }
 
-            rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
+            rb.velocity = new Vector2(currentSpeed * move, rb.velocity.y);
         }
         else
         {
             // If not running, set velocity to zero
-            rb.velocity = new Vector2(currentSpeed * Horizontal, rb.velocity.y);
+            rb.velocity = new Vector2(currentSpeed * horizontal, rb.velocity.y);
         }
 
+        Rotate(horizontal);
     }
-
 
     void HandleJump()
     {
@@ -153,19 +153,25 @@ public class PlayerMovement : MonoBehaviour
         {
             TakeDamage(20);
         }
-        if (collision.gameObject.CompareTag("Ground"))
+        else if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsLeft = 1;
         }
     }
 
-    private void Rotate(float rotationAngle)
+    private void Rotate(float horizontalInput)
     {
-        Vector3 rotation = transform.rotation.eulerAngles;
-        rotation.y = rotationAngle;
-        transform.rotation = Quaternion.Euler(rotation);
-        Rotate(90f);  // Rotate to the left
-        Rotate(-90f);  // Rotate to the right
-
+        if (horizontalInput > 0 && !isFacingRight){
+                    
+            // Flip the player
+            isFacingRight = !isFacingRight;
+            transform.Rotate(0, 180, 0);
+        }
+        else if(horizontalInput < 0 && isFacingRight)
+        {
+            // Flip the player
+            isFacingRight = !isFacingRight;
+            transform.Rotate(0, 180, 0);
+        }
     }
 }

@@ -11,7 +11,7 @@ public class StaminaManager : MonoBehaviour
     private float runningSpeed = 10f; // Double the normal speed
     private bool isRunning = false;
     private float staminaDrainRate = 0.08f; // Adjust the stamina drain rate here
-    private float regenRate = 0.08f; // Adjust the stamina regeneration rate here
+    private float regenRate = 0.04f; // Adjust the stamina regeneration rate here
 
     public bool IsRunning
     {

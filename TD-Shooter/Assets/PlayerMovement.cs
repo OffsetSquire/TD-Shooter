@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    bool canShoot = true;
     public int ammountOfBullets;
     public int maxAmmountOfBullets;
-    public bool isMoving;
+    public bool canMove = true;
 
 
     private float horizontal;
@@ -65,22 +66,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetButtonDown("Horizontal"))
-        {
-            isMoving = true;
-        }
-        else if(!Input.GetButtonDown("Horizontal"))
-        {
-            isMoving = false;
-        }
         if(Input.GetKeyDown("r"))
         {
             StartCoroutine(Reload());
         }
             
-
-        HandleMovement();
-        HandleJump();
+        if(canMove)
+        {
+            HandleMovement();
+            HandleJump();
+        }
+        
 
         if (Input.GetButtonDown("Crouch"))
         {
@@ -100,28 +96,32 @@ public class PlayerMovement : MonoBehaviour
 
         void ShootBullet()
         {
-            if (bulletPrefab != null && shootingPoint != null && ammountOfBullets > 0 && !isMoving)
+            if (bulletPrefab != null && shootingPoint != null && ammountOfBullets > 0 && canShoot)
             {
 
                 Quaternion q= shootingPoint.rotation;
                 GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
                 ammountOfBullets -= 1;
+                canShoot = false;
+                StartCoroutine(ShootCoolDown());
             }
         }
 
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             ShootBullet();
+
         }
 
     }
     public IEnumerator ShootCoolDown()
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(2);
+        canShoot = true;
     }
     public IEnumerator Reload()
     {
-       
+        canMove = false;
         yield return new WaitForSeconds(2.5f);
         for (int i = 0; i < maxAmmountOfBullets; i++)
         {
@@ -129,8 +129,10 @@ public class PlayerMovement : MonoBehaviour
             if (ammountOfBullets > maxAmmountOfBullets)
             {
                 ammountOfBullets--;
+                
             }
         }
+        canMove = true;
     }
 
     void BaseSpeed()

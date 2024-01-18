@@ -91,8 +91,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleMovement()
     {
-        Horizontal = Input.GetAxisRaw("Horizontal");
-        Move = Input.GetAxis("Horizontal");
+        BaseSpeed();
 
         float currentSpeed = isCrouching ? speed / 3f : speed;
 
@@ -109,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             // If not running, set velocity to zero
-            rb.velocity = new Vector2(0f, rb.velocity.y);
+            rb.velocity = new Vector2(currentSpeed * Horizontal, rb.velocity.y);
         }
 
         Rotate();

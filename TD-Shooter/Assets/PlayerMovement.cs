@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public int ammountOfBullets;
+    public int maxAmmountOfBullets;
+    public bool isMoving;
+
+
     private float horizontal;
     public float speed;
     public Transform shootingPoint;
@@ -24,7 +29,10 @@ public class PlayerMovement : MonoBehaviour
     public float healthAmount = 100f;
 
     private StaminaManager staminaManager; // Added variable
-
+    private void Awake()
+    {
+        ammountOfBullets = maxAmmountOfBullets;
+    }
     public void TakeDamage(float damage)
     {
         Debug.Log("takedamage");
@@ -57,6 +65,20 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetButtonDown("Horizontal"))
+        {
+            isMoving = true;
+        }
+        else if(!Input.GetButtonDown("Horizontal"))
+        {
+            isMoving = false;
+        }
+        if(Input.GetKeyDown("r"))
+        {
+            StartCoroutine(Reload());
+        }
+            
+
         HandleMovement();
         HandleJump();
 
@@ -78,11 +100,12 @@ public class PlayerMovement : MonoBehaviour
 
         void ShootBullet()
         {
-            if (bulletPrefab != null && shootingPoint != null)
+            if (bulletPrefab != null && shootingPoint != null && ammountOfBullets > 0 && !isMoving)
             {
+
                 Quaternion q= shootingPoint.rotation;
                 GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
-
+                ammountOfBullets -= 1;
             }
         }
 
@@ -91,6 +114,23 @@ public class PlayerMovement : MonoBehaviour
             ShootBullet();
         }
 
+    }
+    public IEnumerator ShootCoolDown()
+    {
+        yield return new WaitForSeconds(4);
+    }
+    public IEnumerator Reload()
+    {
+       
+        yield return new WaitForSeconds(2.5f);
+        for (int i = 0; i < maxAmmountOfBullets; i++)
+        {
+            ammountOfBullets++;
+            if (ammountOfBullets > maxAmmountOfBullets)
+            {
+                ammountOfBullets--;
+            }
+        }
     }
 
     void BaseSpeed()
@@ -101,6 +141,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleMovement()
     {
+        
         BaseSpeed();
 
         float currentSpeed = isCrouching ? speed / 3f : speed;

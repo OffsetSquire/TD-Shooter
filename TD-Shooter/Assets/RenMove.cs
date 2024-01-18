@@ -5,16 +5,20 @@ using UnityEngine;
 public class RenMove : MonoBehaviour
 {
     private Transform target;
-    private float horizontal; // Fixed variable naming
+    private float horizontal;
+    private bool isFacingRight = false;
 
     public float speed;
-    public float minDistance; // Set the minimum distance here
-    private bool isFacingRight = false;
+    private float minDistance; // Now it's a random value between 18 and 23
+
+    private float runTimer = 0f;
+    private float runDuration = 3f;
 
     // Start is called before the first frame update
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        UpdateMinDistance();
     }
 
     // Update is called once per frame
@@ -26,7 +30,22 @@ public class RenMove : MonoBehaviour
         {
             // Move towards the player only if within the minimum distance
             transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
+            runTimer = runDuration; // Reset the run timer when in proximity to the player
             Flip(); // Call the Flip method
+        }
+        else
+        {
+            // If not in proximity to the player, run for a certain duration
+            if (runTimer > 0f)
+            {
+                transform.Translate(Vector2.right * (isFacingRight ? 1f : -1f) * speed * Time.deltaTime);
+                runTimer -= Time.deltaTime;
+            }
+            else
+            {
+                // If the run duration is over, change direction
+                Flip();
+            }
         }
     }
 
@@ -40,6 +59,13 @@ public class RenMove : MonoBehaviour
             Vector3 newScale = transform.localScale;
             newScale.x *= -1f;
             transform.localScale = newScale;
+
+            UpdateMinDistance(); // Update the minimum distance when the direction changes
         }
+    }
+
+    private void UpdateMinDistance()
+    {
+        minDistance = Random.Range(18f, 23f);
     }
 }

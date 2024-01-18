@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
             if (bulletPrefab != null && shootingPoint != null)
             {
                 GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
-                
+
             }
         }
 
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
-    
+
     void BaseSpeed()
     {
         Horizontal = Input.GetAxisRaw("Horizontal");
@@ -121,7 +121,6 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(currentSpeed * Horizontal, rb.velocity.y);
         }
 
-        Rotate();
     }
 
 
@@ -160,18 +159,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Rotate()
+    private void Rotate(float rotationAngle)
     {
-        if ((isFacingRight && Horizontal < 0f) || (!isFacingRight && Horizontal > 0f))
-        {
-            isFacingRight = !isFacingRight;
-            Vector3 rotation = transform.rotation.eulerAngles;
+        Vector3 rotation = transform.rotation.eulerAngles;
+        rotation.y = rotationAngle;
+        transform.rotation = Quaternion.Euler(rotation);
+        Rotate(90f);  // Rotate to the left
+        Rotate(-90f);  // Rotate to the right
 
-            rotation.y += 180f;
-
-            rotation.y += 180f;     
-
-            transform.rotation = Quaternion.Euler(rotation);
-        }
     }
 }

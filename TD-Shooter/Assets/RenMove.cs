@@ -6,6 +6,7 @@ public class RenMove : MonoBehaviour
 {
     private Transform target;
     private float horizontal;
+    private Animator animator;
     private bool isFacingRight = false;
 
     public float speed;
@@ -17,6 +18,8 @@ public class RenMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Assuming your Animator component is attached to the same GameObject
+        animator = GetComponent<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         UpdateMinDistance();
     }
@@ -24,6 +27,15 @@ public class RenMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float horizontalMove = Input.GetAxis("Horizontal");
+        if (horizontalMove < 0)
+        {
+            isFacingRight = false;
+        }
+        else if (horizontalMove > 0)
+        {
+            isFacingRight = true;
+        }
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
         if (distanceToPlayer <= minDistance)
@@ -31,7 +43,8 @@ public class RenMove : MonoBehaviour
             // Move towards the player only if within the minimum distance
             transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
             runTimer = runDuration; // Reset the run timer when in proximity to the player
-            Flip(); // Call the Flip method
+            RotateTowards(isFacingRight ? Vector2.left : Vector2.right); // Call the RotateTowards method
+            FlipCharacterSprite(); // Call the Flip method
         }
         else
         {
@@ -48,28 +61,40 @@ public class RenMove : MonoBehaviour
             else
             {
                 // If the run duration is over, change direction
-                Flip();
+                FlipCharacterSprite();
             }
         }
     }
 
-    private void Flip()
+    void FlipCharacterSprite()
     {
-        horizontal = Input.GetAxisRaw("Horizontal"); // Get input inside the Flip method
+        // Assuming your character's sprite renderer is attached to the same GameObject
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        // Flip the sprite based on the direction
+        if (isFacingRight)
         {
-            isFacingRight = !isFacingRight;
-            Vector3 newScale = transform.localScale;
-            newScale.x *= 1f;
-            transform.localScale = newScale;
-
-            UpdateMinDistance(); // Update the minimum distance when the direction changes
+            spriteRenderer.flipX = false; // No flip
+        }
+        else
+        {
+            spriteRenderer.flipX = true; // Flip horizontally
         }
     }
 
-    private void UpdateMinDistance()
+        private void UpdateMinDistance()
     {
         minDistance = Random.Range(18f, 23f);
+    }
+
+    // Rotate towards a specified direction
+    private void RotateTowards(Vector2 direction)
+    {
+        // Calculate the rotation angle based on the direction
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Interpolate the current rotation to the target rotation
+        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // Adjust the speed as needed
     }
 }

@@ -5,16 +5,17 @@ using UnityEngine;
 public class RenMove : MonoBehaviour
 {
     private Transform target;
-    private float horizontal; // Fixed variable naming
+    private float horizontal;
 
     public float speed;
-    public float minDistance; // Set the minimum distance here
+    private float minDistance; // Now it's a random value between 5 and 23
     private bool isFacingRight = false;
 
     // Start is called before the first frame update
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        UpdateMinDistance();
     }
 
     // Update is called once per frame
@@ -40,6 +41,13 @@ public class RenMove : MonoBehaviour
             Vector3 newScale = transform.localScale;
             newScale.x *= -1f;
             transform.localScale = newScale;
+
+            UpdateMinDistance(); // Update the minimum distance when the direction changes
         }
+    }
+
+    private void UpdateMinDistance()
+    {
+        minDistance = Random.Range(5f, 23f);
     }
 }

@@ -51,9 +51,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        void ShootBullet()
+        {
+            if (bulletPrefab != null && shootingPoint != null)
+            {
+                GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
+                
+            }
+        }
+
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            //ShootBullet();
+            ShootBullet();
         }
 
         HandleMovement();

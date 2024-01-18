@@ -10,7 +10,7 @@ public class OndRenMove : MonoBehaviour
     public float rotationSpeed;
     public float minDistance;
     private bool isFollowingRen = true;
-    private float followTimer = 5f; // Time to follow "Ren" in seconds
+    private float followTimer = 15f; // Time to follow "Ren" in seconds
 
     // Start is called before the first frame update
     void Start()

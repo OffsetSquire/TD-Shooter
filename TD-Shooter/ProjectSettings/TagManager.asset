@@ -37,8 +37,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Flashlight
+  - HUD / HP & Stam
   - Titel Ui
   m_SortingLayers:
   - name: Default

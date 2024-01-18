@@ -6,17 +6,18 @@ public class OndRenMove : MonoBehaviour
 {
     private Transform target;
     private Transform with;
-    public float speed;
+    private float speed; // Now it's a random speed
     public float rotationSpeed;
     public float minDistance;
     private bool isFollowingRen = true;
-    private float followTimer = 15f; // Time to follow "Ren" in seconds
+    private float followTimer = 5f; // Time to follow "Ren" in seconds
 
     // Start is called before the first frame update
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         with = GameObject.FindGameObjectWithTag("Ren").GetComponent<Transform>();
+        UpdateSpeed();
     }
 
     // Update is called once per frame
@@ -53,6 +54,7 @@ public class OndRenMove : MonoBehaviour
         {
             isFollowingRen = false;
             followTimer = 5f; // Reset the timer
+            UpdateSpeed(); // Update the speed when changing direction
         }
     }
 
@@ -70,5 +72,10 @@ public class OndRenMove : MonoBehaviour
             // Move towards the player only if within the minimum distance
             transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
         }
+    }
+
+    void UpdateSpeed()
+    {
+        speed = Random.Range(8f, 18f); // Set the speed to a random value between 3 and 6
     }
 }

@@ -38,7 +38,11 @@ public class RenMove : MonoBehaviour
             // If not in proximity to the player, run for a certain duration
             if (runTimer > 0f)
             {
-                transform.Translate(Vector2.right * (isFacingRight ? 1f : -1f) * speed * Time.deltaTime);
+                // Stand still if facing left
+                if (isFacingRight)
+                {
+                    transform.Translate(Vector2.right * speed * Time.deltaTime);
+                }
                 runTimer -= Time.deltaTime;
             }
             else
@@ -57,7 +61,7 @@ public class RenMove : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             Vector3 newScale = transform.localScale;
-            newScale.x *= -1f;
+            newScale.x *= 1f;
             transform.localScale = newScale;
 
             UpdateMinDistance(); // Update the minimum distance when the direction changes

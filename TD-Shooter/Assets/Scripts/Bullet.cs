@@ -8,16 +8,11 @@ public class Bullet : MonoBehaviour
     public float speed;
     public Rigidbody2D rb;
 
-   
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("bulcol");
-        //
 
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Enemy.inst.TakeDamage(1);
-        }
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(!collision.gameObject.CompareTag("Player"))
+            Destroy(gameObject);
     }
     void Start()
     {

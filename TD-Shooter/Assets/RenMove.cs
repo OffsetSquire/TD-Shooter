@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class RenMove : MonoBehaviour
 {
+    public static RenMove inst;
     private Transform target;
     private float horizontal;
     private Animator animator;
@@ -17,7 +18,7 @@ public class RenMove : MonoBehaviour
     private float runDuration = 3f;
 
     public int maxHealth = 100;
-    private int currentHealth;
+    public int currentHealth;
 
     private static int renKillCount = 0; // Static counter to track the number of Ren characters killed
     public string nextSceneName = "Level2"; // Change this to the name of the next scene
@@ -96,29 +97,22 @@ public class RenMove : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // Adjust the speed as needed
     }
-    void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("shot");
         // Check if the colliding object has the tag "Bullet"
-        if (other.CompareTag("Bullet"))
+        if (other.gameObject.CompareTag("Bullet"))
         {
-            // Get the Bullet script or component from the bullet GameObject if available
-            Bullet bulletScript = other.GetComponent<Bullet>();
-
-            // Check if the Bullet script is not null
-            if (bulletScript != null)
-            {
                 // Apply damage to the character based on the bullet's damage value
-                TakeDamage(34);
+                TakeDamage();
 
-                // Destroy the bullet GameObject upon collision (you may want to handle this differently)
-                Destroy(other.gameObject);
-            }
+            
         }
     }
     // Function to handle taking damage
-    public void TakeDamage(int damage)
+    public void TakeDamage()
     {
-        currentHealth -= damage;
+        currentHealth -= 34;
 
         // Check if the character is dead
         if (currentHealth <= 0)

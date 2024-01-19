@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float maxHealth = 3f;
+    public static Enemy inst;
+    public float maxHealth = 3f;
     float health;
 
     private void Start()
     {
+        inst = this;
         health = maxHealth;
     }
 

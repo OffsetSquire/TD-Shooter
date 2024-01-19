@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    float initialMovement = 5;
     public float speed;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+   
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        Debug.Log("bulcol");
+        //
 
-        if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemyComponent))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            enemyComponent.TakeDamage(1);
+            Enemy.inst.TakeDamage(1);
         }
     }
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.velocity = transform.right * speed*-1;
+        rb.velocity = new Vector2(initialMovement * speed, 0f) * Time.deltaTime;
     }
+
 }

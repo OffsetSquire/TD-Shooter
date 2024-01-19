@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1119155339153750966}
   - component: {fileID: 149673796893006188}
   - component: {fileID: 4068105659429665848}
-  - component: {fileID: 4359440803061317642}
   - component: {fileID: 411679635222802495}
+  - component: {fileID: 2872005883122339765}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -106,8 +106,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!60 &4359440803061317642
-PolygonCollider2D:
+--- !u!114 &411679635222802495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125751094802208085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a3f636d836bf7449afd9393ff2a3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10000
+  rb: {fileID: 4068105659429665848}
+--- !u!61 &2872005883122339765
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -129,22 +143,6 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.5, y: 0.5}
-      - {x: -0.5, y: -0.5}
-      - {x: 0.5, y: -0.5}
-      - {x: 0.5, y: 0.5}
---- !u!114 &411679635222802495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125751094802208085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a3f636d836bf7449afd9393ff2a3cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0.17

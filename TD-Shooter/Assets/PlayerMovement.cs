@@ -3,9 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System.Collections.Generic;
+
+
+
 
 public class PlayerMovement : MonoBehaviour
 {
+    public float ClipLength = 1f;
+    public GameObject AudioClip;
+
+
+
+    public AudioSource audioSource;
+    public AudioClip shootingAudioClip;
     bool canShoot = true;
     public int ammountOfBullets;
     public int maxAmmountOfBullets;
@@ -56,6 +67,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        AudioClip.SetActive(false);
+
+
+
         rb = GetComponent<Rigidbody2D>();
         standingColliderSize = GetComponent<BoxCollider2D>().size;
         crouchingColliderSize = new Vector2(standingColliderSize.x, standingColliderSize.y / 2f);
@@ -99,12 +114,21 @@ public class PlayerMovement : MonoBehaviour
             if (bulletPrefab != null && shootingPoint != null && ammountOfBullets > 0 && canShoot)
             {
 
+                audioSource.PlayOneShot(shootingAudioClip);
+
                 Quaternion q= shootingPoint.rotation;
                 GameObject bullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
                 ammountOfBullets -= 1;
                 canShoot = false;
                 StartCoroutine(ShootCoolDown());
             }
+
+
+            
+            
+
+
+
         }
 
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)

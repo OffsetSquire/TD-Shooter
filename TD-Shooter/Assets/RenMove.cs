@@ -125,6 +125,17 @@ public class RenMove : MonoBehaviour
     void Die()
     {
         // Add any death-related actions here
+        renKillCount++;
+        if (renKillCount >= 4)
+        {
+            ChangeScene();
+        }
+
         Destroy(gameObject);
+
+    }
+    void ChangeScene()
+    {
+        SceneManager.LoadScene("Level2");
     }
 }

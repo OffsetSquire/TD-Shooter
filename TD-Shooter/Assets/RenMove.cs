@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RenMove : MonoBehaviour
 {
@@ -12,8 +13,14 @@ public class RenMove : MonoBehaviour
     public float speed;
     private float minDistance; // Now it's a random value between 18 and 23
 
-    private float runTimer = 0f;
+    private float runTimer = 5f;
     private float runDuration = 3f;
+
+    public int maxHealth = 100;
+    private int currentHealth;
+
+    private static int renKillCount = 0; // Static counter to track the number of Ren characters killed
+    public string nextSceneName = "Level2"; // Change this to the name of the next scene
 
     // Start is called before the first frame update
     void Start()
@@ -22,26 +29,18 @@ public class RenMove : MonoBehaviour
         animator = GetComponent<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         UpdateMinDistance();
+        currentHealth = maxHealth; // Initialize current health
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontalMove = Input.GetAxis("Horizontal");
-        if (horizontalMove < 0)
-        {
-            isFacingRight = false;
-        }
-        else if (horizontalMove > 0)
-        {
-            isFacingRight = true;
-        }
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
         if (distanceToPlayer <= minDistance)
         {
             // Move towards the player only if within the minimum distance
-            transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             runTimer = runDuration; // Reset the run timer when in proximity to the player
             RotateTowards(isFacingRight ? Vector2.left : Vector2.right); // Call the RotateTowards method
             FlipCharacterSprite(); // Call the Flip method
@@ -61,7 +60,7 @@ public class RenMove : MonoBehaviour
             else
             {
                 // If the run duration is over, change direction
-                FlipCharacterSprite();
+                
             }
         }
     }
@@ -82,7 +81,7 @@ public class RenMove : MonoBehaviour
         }
     }
 
-        private void UpdateMinDistance()
+    private void UpdateMinDistance()
     {
         minDistance = Random.Range(18f, 23f);
     }
@@ -96,5 +95,42 @@ public class RenMove : MonoBehaviour
         // Interpolate the current rotation to the target rotation
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // Adjust the speed as needed
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Check if the colliding object has the tag "Bullet"
+        if (other.CompareTag("Bullet"))
+        {
+            // Get the Bullet script or component from the bullet GameObject if available
+            Bullet bulletScript = other.GetComponent<Bullet>();
+
+            // Check if the Bullet script is not null
+            if (bulletScript != null)
+            {
+                // Apply damage to the character based on the bullet's damage value
+                TakeDamage(34);
+
+                // Destroy the bullet GameObject upon collision (you may want to handle this differently)
+                Destroy(other.gameObject);
+            }
+        }
+    }
+    // Function to handle taking damage
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        // Check if the character is dead
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    // Function to handle character death
+    void Die()
+    {
+        // Add any death-related actions here
+        Destroy(gameObject);
     }
 }
